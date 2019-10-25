@@ -32,3 +32,10 @@ horizon_detection.m contains the main function.
 	- MATLAB basic package
 	- MATLAB image processing toolbox (only required for visualizing results).
 
+
+The lsd can be also found here: https://github.com/XinGuoZJU/lsd
+USE:
+    cd lsd
+    make all
+    mv lsd ../LSD_VC
+
