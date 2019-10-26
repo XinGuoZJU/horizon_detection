@@ -39,7 +39,7 @@ for i = 1:max_rand_samples
        end
     end
 end
-disp(['Use ', num2str(effective_model_idx), ' effective hypothesized vps']);
+% disp(['Use ', num2str(effective_model_idx), ' effective hypothesized vps']);
 models(effective_model_idx+1:end,:) = [];
 p = p_of_lseg_given_v_probability(lsegs,models,stdev);
 

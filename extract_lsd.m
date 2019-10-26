@@ -20,7 +20,7 @@ function lsegs = extract_lsd(im, min_len, lsd_param)
 
 imwrite(im,'input_pgm.pgm');
 system_call = ['./LSD_VC -d ' num2str(lsd_param), ' input_pgm.pgm', ' ./lsd_output.txt'];
-[status, result] = system(system_call)
+[status, result] = system(system_call);
 lsegs = load('./lsd_output.txt');
 
 %% LSD format

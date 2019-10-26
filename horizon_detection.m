@@ -14,7 +14,7 @@
 % 
 % Authr: Yiliang Xu, Kitware
 
-function h = horizon_detection(im_fn, options)
+function h = horizon_detection(im_fn, out_dir, options)
 
 close all;
 
@@ -90,7 +90,11 @@ if options.debug
 end
 
 % change line segments coordinate and create other fields
-lsegs = pre_process_lsegs(lsegs);
+lsegs = pre_process_lsegs(lsegs); % read the function to learn more about input and output lsegs
+
+% output lsegs: 
+% 1   2   3   4    5     6  7 8,9,10 11
+% x1, y1, x2, y2, angle, r, ?, line, id
 
 
 %% detect vanishing points
@@ -100,28 +104,37 @@ if isempty(prob)
     disp('J-linkage did not find any hypothesized vanishing point, return empty horizon line');
     return;
 end
-fh_grouping=show_vps_and_lsegs(vps,im,[]);
+% fh_grouping=show_vps_and_lsegs(vps,im,[]);
 
 
 %% generate horizon
 [h,zenith,v_vps,h_vps] = horizon(vps,[H,W],[0,0],im_args.focal_range,options.opt_option);
 
 
-if ~isempty(h)
-    % optional: to visualize horizon in image
-    [fh_horizon] = draw_lines_in_img(im,h);
-else
-    disp('Did not find any horizon');
-end
+prediction.name = im_fn;
+prediction.image_size = [H, W];
+prediction.lines = lsegs;
+prediction.v_vps = v_vps;
+prediction.h_vps = h_vps;
+
+image_name_list = strsplit(im_fn, '/');
+image_name = image_name_list{end};
+dir_name = image_name_list{end - 1};
+image_name = strsplit(image_name, '.');
+image_name = image_name{1};
+save_path = [out_dir, '/', dir_name, '/', image_name];
+mkdir(save_path);
+save([save_path, '/data.mat'], 'prediction')
+
+
+%if ~isempty(h)
+%    % optional: to visualize horizon in image
+%    [fh_horizon] = draw_lines_in_img(im,h);
+%else
+%    disp('Did not find any horizon');
+%end
     
 
 disp('Done horizon detection');
-
-
-
-
-
-
-
 
 

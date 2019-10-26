@@ -18,9 +18,6 @@
 
 function [h,zenith,v_vps,h_vps] = horizon(vps,imsize,pp,est_f_range,opt_option)
 
-
-
-
 h=[]; 
 H=imsize(1);
 W=imsize(2);
@@ -36,13 +33,13 @@ end
 [zenith, v_vps,h_vps_finite,h_vps_infinite] = split_vps_into_VH(vps,imsize,pp,est_f_range);
 h_vps = [h_vps_finite; h_vps_infinite];
 
-disp(['Zenith: ', num2str(uint8(~isempty(zenith)))]);
-disp(['h_vps_finite: ', num2str(length(h_vps_finite))] );
-disp(['h_vps_infinite: ', num2str(length(h_vps_infinite))] );
+%disp(['Zenith: ', num2str(uint8(~isempty(zenith)))]);
+%disp(['h_vps_finite: ', num2str(length(h_vps_finite))] );
+%disp(['h_vps_infinite: ', num2str(length(h_vps_infinite))] );
 
 if isempty(zenith)  % no zenith
     if length(h_vps) > 1 % there are 2+ horizonal vp, weighted least square
-        disp('No zenith, use all 2+ h_vp by weighted least square');
+        %disp('No zenith, use all 2+ h_vp by weighted least square');
         w=zeros(length(h_vps));
         hV=zeros(length(h_vps),3);
         for i=1:length(h_vps)
@@ -61,7 +58,7 @@ if isempty(zenith)  % no zenith
         h = eigH(:, smallest);
         h = h / norm(h(1:2));
     else % have 1- horizontal vp
-        disp('No zenith, less than 2 h_vp. Return empty horizon');
+        %disp('No zenith, less than 2 h_vp. Return empty horizon');
         h = [];
     end
 else % there is zenith
@@ -69,7 +66,7 @@ else % there is zenith
     ver_line = ver_line / norm(ver_line(1:2));
     if ~isempty(h_vps_infinite) % if there is an infinite h_vp
         if length(h_vps_finite) < 1 % there is no finite h_vp
-            disp('Has zenith, no finite h_vp, use all infinite_h_vp by weighted least square');
+            %disp('Has zenith, no finite h_vp, use all infinite_h_vp by weighted least square');
             w=zeros(length(h_vps));
             hV=zeros(length(h_vps),3);
             for i=1:length(h_vps)
@@ -89,7 +86,7 @@ else % there is zenith
             h = h / norm(h(1:2));
         else % there is finite (and zenith), then ignore infinite_h_vp
             % given ver_line is [a,b,c], then horizon should be [-b,a,cc]
-            disp('Has zenith, has finite h_vp, ignore infinite h_vp');
+            %disp('Has zenith, has finite h_vp, ignore infinite h_vp');
             weight_sum = 0;
             cc = 0;
             for j=1:length(h_vps_finite)
@@ -110,7 +107,7 @@ else % there is zenith
         end
     else % there is only finite horizontal vp, there is zenith
         if length(h_vps)>0
-            disp('Has zenith, has finite h_vp, no infinite h_vp');
+            %disp('Has zenith, has finite h_vp, no infinite h_vp');
             % given ver_line is [a,b,c], then horizon should be [-b,a,cc]
             weight_sum = 0;
             cc = 0;
@@ -130,7 +127,7 @@ else % there is zenith
             h = [-ver_line(2), ver_line(1), cc];
             h = h / norm(h(1:2));
         else
-            disp('Has zenith, but no h_vp. Return empty horizon');
+            %disp('Has zenith, but no h_vp. Return empty horizon');
             h = [];
         end
     end

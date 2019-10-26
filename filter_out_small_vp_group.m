@@ -15,7 +15,7 @@ end
 for i = 1:length(vps)
    if size(vps(i).lsegs, 1) < min_num_lsegs
        remove(end+1) = i;
-       disp(['removing vp: ', num2str(i)]);
+       % disp(['removing vp: ', num2str(i)]);
    end
 end
 

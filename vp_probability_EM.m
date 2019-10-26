@@ -25,7 +25,7 @@ nlsegs = size(lsegs, 1);
 
 %% J-linkage clustering
 vps = j_linkage_vp2(im,lsegs,options,[]);
-fh=show_vps_and_lsegs(vps,im,options.color);
+% fh=show_vps_and_lsegs(vps,im,options.color);
 ngroups = length(vps);
 if ngroups<1
     p=[];
@@ -47,7 +47,7 @@ end
 
 %% initialize EM
 for i = 1:length(vps)
-    lsegs_length = size(vps(i).lsegs,1)
+    lsegs_length = size(vps(i).lsegs,1);
     
     vps(i).vp = least_square_vp(vps(i).lsegs);
     vps(i).var = 1e6;
