@@ -19,9 +19,14 @@ function lsegs = extract_lsd(im, min_len, lsd_param)
 [H,W,c]=size(im);
 
 imwrite(im,'input_pgm.pgm');
-system_call = ['./LSD_VC -d ' num2str(lsd_param), ' input_pgm.pgm', ' ./lsd_output.txt'];
+tmp_file = [datestr(now,'yyyymmddHHMMSSFFF'), '.txt'];
+
+system_call = ['./LSD_VC -d ' num2str(lsd_param), ' input_pgm.pgm', ' ./', tmp_file];
 [status, result] = system(system_call);
-lsegs = load('./lsd_output.txt');
+lsegs = load(['./', tmp_file]);
+
+system_call2 = ['rm ', tmp_file];
+system(system_call2);
 
 %% LSD format
 % % x1, y1, x2, y2, width, p, -log_nfa.

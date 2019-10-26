@@ -39,3 +39,4 @@ USE:
     make all
     mv lsd ../LSD_VC
 
+Attention: Because the line segments are written into the file 'lsd_output.txt', so the code cannot be run several times at the same time.
