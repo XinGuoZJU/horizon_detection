@@ -99,6 +99,7 @@ lsegs = pre_process_lsegs(lsegs); % read the function to learn more about input 
 
 %% detect vanishing points
 [vps, prob] = vp_probability_EM(lsegs, im, options, im_args);
+
 if isempty(prob)
     h=[];
     disp('J-linkage did not find any hypothesized vanishing point, return empty horizon line');
