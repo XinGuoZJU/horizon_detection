@@ -16,12 +16,14 @@ def load_data(data_name):
     im_sz = im_sz[0].tolist()
      
     vp_list = []
-    if v_vps.size > 0:
+
+    v_vp_num = v_vps.size
+    if v_vps.size == 1:
         v_vps = v_vps[0, 0]
         v_vp, v_lines, var, tr_pt, pan_var, tilt_var, consistency_measure, \
             gauss_error, mean_gauss_error, pan_tilt, gauss_point = v_vps
         vp_list.append(v_vp[0])
-    
+
     if h_vps.size > 0:
         for num, vp in enumerate(h_vps):
             vp = vp[0]
@@ -34,9 +36,9 @@ def load_data(data_name):
         vps_homo = np.array(vp_list).T
         vps = np.array([vps_homo[0] / vps_homo[2], vps_homo[1] / vps_homo[2]]).T.tolist()
     else:
-        vp_list = []
+        vps = []
 
-    return name, im_sz, vps
+    return name, im_sz, vps, v_vp_num
 
 
 def point2line(end_points):
@@ -78,7 +80,7 @@ def process(data_list, save_path):
 
     for data_name in data_list:
         print(data_name)
-        image_path, image_size, vps = load_data(data_name)
+        image_path, image_size, vps, v_vp_num = load_data(data_name)
         # image_size: height x width
         if vps == []:
             continue
@@ -91,14 +93,14 @@ def process(data_list, save_path):
         image_names = image_path.split('/')
         image_name = os.path.join(image_names[-2], image_names[-1])
         
-        json_out = {'image_path': image_name, 'image_size': image_size, 'vp': vps_output} 
+        json_out = {'image_path': image_name, 'image_size': image_size, 'vp': vps_output, 'zvp_num': v_vp_num}
 
         json.dump(json_out, save_op)
         save_op.write('\n')
 
 
 if __name__ == '__main__':
-    data_name = 'ScanNet'   # 'YUD', 'ScanNet', 'SceneCityUrban3D', 'SUNCG'
+    data_name = 'SUNCG_aug'   # 'YUD', 'ScanNet', 'SceneCityUrban3D', 'SUNCG'
 
     path = '/n/fs/vl/xg5/workspace/baseline/horizon_detection/dataset/' + data_name + '/output'
     dir_list = [os.path.join(path, dir_path) for dir_path in os.listdir(path)]
